@@ -4,7 +4,7 @@ import FrontCards from '../components/front/FrontCards';
 export default function Home() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <FrontCards />
     </>
   )

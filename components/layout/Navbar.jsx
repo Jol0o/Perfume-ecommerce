@@ -30,14 +30,15 @@ function Navbar() {
   return (
     <div className="w-full my-10">
       <div className="container px-2 md:px-10 min-h-[70px] m-auto bg-[#FAFAFA] flex justify-between items-center rounded-md">
-        <div>
-          <Link href="/">
-            <p className="text-sm font-bold">New Drops 🔥</p>
-          </Link>
-        </div>
-        <div>
-          <Image src="/logo/Group.png" alt="logo" width={100} height={100} />
-        </div>
+        <a href="/">
+          <Image
+            src={"/logo/icon.png"}
+            alt={"Crafting Aromatics"}
+            height={50}
+            width={50}
+            className="object-contain rounded-lg md:max-h-[350px] max-h-[180px] h-full"
+          />
+        </a>
         <ul className="flex items-center justify-center gap-5">
           <li className="flex items-center justify-center">
             <input
@@ -74,7 +75,7 @@ function Navbar() {
               <Profile />
             ) : (
               <Link href="/login">
-                <button className="px-3 py-1 font-bold uppercase bg-orange-400 text-[#232321] rounded-md">
+                <button className="px-3 py-1 font-bold uppercase bg-orange-400 text-white rounded-md">
                   Sign up
                 </button>
               </Link>

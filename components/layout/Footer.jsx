@@ -7,11 +7,11 @@ import { AiOutlineFacebook, AiOutlineInstagram } from "react-icons/ai";
 function Footer() {
   return (
     <div className="flex flex-col justify-between w-full px-2 py-10">
-      <div className="container m-auto bg-[#4A69E2] min-h-[80vh] rounded-[30px]">
+      <div className="container m-auto bg-[#a48c7c] min-h-[80vh] rounded-[30px]">
         <div className="flex flex-wrap items-center justify-between gap-5 p-10">
           <div className="w-full md:w-[500px]">
             <h1 className="text-[48px] font-semibold uppercase leading-tight font-mono text-[#FAFAFA]">
-              Join our KicksPlus Club & get 15% off
+              Join our AromaPlus Club & get 15% off
             </h1>
             <p className="my-3 font-semibold text-gray-300 text-md">
               Sign up for free! Join the community.
@@ -31,10 +31,10 @@ function Footer() {
             </div>
           </div>
           <div className="flex justify-center w-1/2">
-            <Image src="/logo/Group2.png" alt="log2" width={300} height={300} />
+            <Image src="/logo/icon.png" alt="log2" width={200} height={200} />
           </div>
         </div>
-        <div className="w-full relative flex-col md:flex-row bg-[#232321] rounded-b-[30px] min-h-[70vh] md:min-h-[55vh] text-[#FAFAFA] flex gap-5 md:justify-between p-5">
+        <div className="w-full relative flex-col md:flex-row bg-[#232321] rounded-b-[30px] min-h-[50vh] md:min-h-[45vh] text-[#FAFAFA] flex gap-5 md:justify-between p-5">
           <div className="max-w-[400px]">
             <h1 className="text-2xl font-bold text-orange-400 ">About us</h1>
             <p className="text-sm font-medium">
@@ -77,15 +77,6 @@ function Footer() {
                 <AiOutlineInstagram />
               </li>
             </ul>
-          </div>
-          <div className="absolute bottom-0 left-1 ">
-            <Image
-              src="/logo/Group1.png"
-              alt="logo"
-              width={1500}
-              height={1500}
-              className="rounded-b-[30px] bg-[#232321]"
-            />
           </div>
         </div>
       </div>
