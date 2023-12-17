@@ -74,7 +74,7 @@ function Navbar() {
               <Profile />
             ) : (
               <Link href="/login">
-                <button className="px-3 py-1 font-bold uppercase bg-orange-400 text-[#232321] rounded-md">
+                <button className="px-3 py-1 font-bold text-white uppercase bg-pink-700 rounded-md">
                   Sign up
                 </button>
               </Link>

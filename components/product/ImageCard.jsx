@@ -4,7 +4,7 @@ import React from "react";
 function ImageCard({ image }) {
 
   return (
-    <div className=" w-full gap-2 lg:w-1/2">
+    <div className="w-full gap-2  lg:w-1/2">
           <Image
             src={image}
             alt="shoes"

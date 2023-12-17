@@ -36,7 +36,7 @@ function FrontCards() {
           </h1>
           <button
             onClick={() => route.push("/product")}
-            className="h-10 md:px-3 text-[#FAFAFA] text-sm rounded-md px-1 font-semibold uppercase bg-blue-500 min-w-32"
+            className="h-10 md:px-3 text-[#FAFAFA] text-sm rounded-md px-1 font-semibold uppercase bg-pink-700 min-w-32"
           >
             Show More
           </button>

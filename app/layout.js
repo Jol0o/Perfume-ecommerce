@@ -9,7 +9,6 @@ export default function RootLayout({ children }) {
       <body className='font-sans bg-[#E7E7E3] '>
         <Navbar />
         {children}
-        <Footer />
       </body>
     </html>
   )
