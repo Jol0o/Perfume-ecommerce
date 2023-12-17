@@ -73,11 +73,27 @@ function DetailCard({ details }) {
         </h1>
         <p className="text-lg font-medium text-gray-600">{details.category}</p>
         <p className="text-[24px] font-bold text-indigo-600">
-          PHP{details.price.toLocaleString()}
+          {details.price.toLocaleString()} PHP
         </p>
       </div>
       <form className="flex flex-col gap-4">
-        <div className="mb-5">
+        <input
+          type="search"
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Enter amount"
+          className={`${
+            open ? "w-38 p-2 border" : "w-0"
+          } outline-none  ease-out duration-300 capitalize  rounded-md mr-2`}
+        />{" "}
+        <input
+          type="search"
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Enter oil based amount"
+          className={`${
+            open ? "w-38 p-2 border" : "w-0"
+          } outline-none  ease-out duration-300 capitalize  rounded-md mr-2`}
+        />
+        {/* <div className="mb-5">
           <h1 className="text-[#232321] uppercase font-bold text-sm mb-2">
             Colors
           </h1>
@@ -108,8 +124,8 @@ function DetailCard({ details }) {
               );
             })}
           </div>
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <h1 className="text-[#232321] uppercase font-bold text-sm mb-2">
             Size
           </h1>
@@ -130,7 +146,7 @@ function DetailCard({ details }) {
               );
             })}
           </div>
-        </div>
+        </div> */}
         <div className="flex flex-col gap-2">
           <div className="flex w-full gap-2">
             <button

@@ -10,12 +10,12 @@ function Header() {
             Perfume product of the year
           </div>
           <div className="flex justify-between items-end absolute bottom-0 w-full min-h-[300px] p-5 md:p-10 text-[#FAFAFA]">
-            <div className="flex flex-col items-start gap-3 md:max-w-[400px]">
+            <div className="flex flex-col items-start gap-3 ">
               <h1 className="text-[30px] md:text-[50px] font-bold uppercase text-pink-700">
-                Perfume
+                Crafting Aromatics
               </h1>
               <p className="text-sm text-pink-700 md:text-xl">
-                Nike introducing the new air max for everyone's comfort
+                Creating your best version of your Perfume
               </p>
               <button className="px-4 py-1 text-sm font-semibold uppercase bg-pink-700 rounded-md md:px-6 md:py-3">
                 Shop now

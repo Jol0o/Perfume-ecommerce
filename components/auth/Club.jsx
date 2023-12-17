@@ -4,12 +4,12 @@ function Club() {
   return (
     <div className="w-[700px] bg-[#FAFAFA] p-5 rounded-xl mt-5">
       <h1 className="text-[clamp(20px,4vw,35px)] font-bold mb-3">
-        Join Kicks Club Get Rewarded Today.
+        Join AromaPlus Club Get Rewarded Today.
       </h1>
       <p className="mb-2 font-medium text-gray-600 text-md">
-        As kicks club member you get rewarded with what you love for doing what
-        you love. Sign up today and receive immediate access to these Level 1
-        benefits:
+        As Aromatic club member you get rewarded with what you love for doing
+        what you love. Sign up today and receive immediate access to these Level
+        1 benefits:
       </p>
       <ul className="mb-2 font-medium text-gray-600 list-disc mx-7 text-md">
         <li>Free shipping​</li>

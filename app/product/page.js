@@ -11,7 +11,7 @@ function page() {
                 <TopHeader />
                 <div className='flex items-center justify-between w-full md:justify-start'>
                     <div>
-                        <h1 className="text-[clamp(20px,5vw,40px)] font-bold">Life Style Shoes</h1>
+                        <h1 className="text-[clamp(20px,5vw,40px)] font-bold">Aromatic Perfume</h1>
                         <p className="text-gray-500">122 Items</p>
                     </div>
                     <MobileFilter />
