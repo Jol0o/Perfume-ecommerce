@@ -46,7 +46,7 @@ function FrontCards() {
             .filter((item) => item.genderType === "women")
             .map((item) => {
               return (
-                <Link href={`/product/${item.id}`} key={item}>
+                <Link href={`/product/${item.id}`} key={item.name}>
                   <div className="max-h-[300px] h-full mt-3 md:mt-0 md:min-h-[500px] sm:w-[clamp(50px,100%,300px)] md:w-[310px] w-[clamp(30px,100%,200px)] flex flex-col items-center justify-center">
                     <div className="relative w-full rounded-lg h-1/2 ">
                       <Image
@@ -77,7 +77,7 @@ function FrontCards() {
             .filter((item) => item.genderType === "men")
             .map((item) => {
               return (
-                <Link href={`/product/${item.id}`} key={item}>
+                <Link href={`/product/${item.id}`} key={item.name}>
                   <div className="max-h-[300px] h-full mt-3 md:mt-0 md:min-h-[500px] sm:w-[clamp(50px,100%,300px)] md:w-[310px] w-[clamp(30px,100%,200px)] flex flex-col items-center justify-center">
                     <div className="relative w-full rounded-lg h-1/2 ">
                       <Image

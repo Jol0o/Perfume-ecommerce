@@ -6,8 +6,7 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  FacebookAuthProvider,
-  onAuthStateChanged,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -19,12 +18,25 @@ function Login() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isRegister, setIsRegister] = useState(false);
   const { updateUser } = useUserStore((state) => state);
   const router = useRouter();
 
-  const login = async () => {
+  const login = async (e) => {
+    e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      router.push("/");
+    } catch (err) {
+      setIsError(true);
+      setError(err.toString());
+    }
+  };
+
+  const register = async (e) => {
+    e.preventDefault();
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
       router.push("/");
     } catch (err) {
       setIsError(true);
@@ -43,23 +55,25 @@ function Login() {
     }
   };
 
-  const fbLogin = async () => {
-    const provider = new FacebookAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-      router.push("/");
-    } catch (err) {
-      setIsError(true);
-      setError(err.toString());
-    }
-  };
+  // const fbLogin = async () => {
+  //   const provider = new FacebookAuthProvider();
+  //   try {
+  //     await signInWithPopup(auth, provider);
+  //     router.push("/");
+  //   } catch (err) {
+  //     setIsError(true);
+  //     setError(err.toString());
+  //   }
+  // };
 
   return (
     <div className="w-full">
       <div className="container flex flex-wrap p-2 m-auto justify-evenly">
         <div className="w-[500px] flex flex-col gap-2">
           <div>
-            <h1 className="text-3xl font-bold text-[#232321]">Login</h1>
+            <h1 className="text-3xl font-bold text-[#232321]">
+              {isRegister ? "Login" : "Register"}
+            </h1>
             <p className="text-sm font-semibold my-1 text-[#232321b9]">
               Forgat your password?
             </p>
@@ -69,12 +83,16 @@ function Login() {
               type="text"
               name="email"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="bg-transparent border border-[#232321] rounded-md p-2"
             />
             <input
               type="password"
               name="password"
+              value={password}
               placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
               className="bg-transparent border border-[#232321] rounded-md p-2"
             />
             <div className="flex items-center gap-2 my-2">
@@ -90,10 +108,10 @@ function Login() {
               </label>
             </div>
             <button
-              onClick={login}
+              onClick={register}
               className="flex bg-[#232321] justify-between py-2 uppercase px-3 rounded-md text-[#fafafa] font-bold text-sm items-center"
             >
-              Email Login{" "}
+              Email Login
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -110,37 +128,27 @@ function Login() {
               </svg>
             </button>
           </form>
+
+          <p className="text-xs font-medium text-center">
+            {isRegister ? "Don't have a account?" : "Already have a account?"}
+            <button
+              onClick={() => setIsRegister(!isRegister)}
+              className="text-blue-500"
+            >
+              {isRegister ? "Sign up" : "Sign in"}
+            </button>
+          </p>
+
           <div className="flex gap-2 mt-2">
             <button
               onClick={loginGoogle}
-              className="h-16 flex items-center justify-center w-[30%] border border-[#232321] rounded-md"
+              className="flex items-center justify-center w-full h-16 border"
             >
               <Image
                 src="/icon/pngegg1.png"
                 alt="icon"
                 width={100}
                 height={50}
-                className="w-10"
-              />
-            </button>
-            <button
-              onClick={fbLogin}
-              className="h-16 flex items-center justify-center w-[30%] border border-[#232321] rounded-md"
-            >
-              <Image
-                src="/icon/pngegg2.png"
-                alt="icon"
-                width={100}
-                height={100}
-                className="w-10"
-              />
-            </button>
-            <button className="h-16 flex items-center justify-center w-[30%] border border-[#232321] rounded-md">
-              <Image
-                src="/icon/pngegg3.png"
-                alt="icon"
-                width={100}
-                height={100}
                 className="w-10"
               />
             </button>

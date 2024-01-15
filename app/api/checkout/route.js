@@ -16,19 +16,24 @@ export async function POST(request) {
                     product_data: {
                         name: item.name,
                         description: item.description,
-                        images: [item.image[0]], // Wrap the URL in an array
+                        images: [item.imageUrl], // Check if item.image is an array
                     },
                     unit_amount: item.price * 100, // Multiply by 100 to convert to the smallest currency unit (e.g., cents)
                 },
                 quantity: item.quantity,
             }));
 
+            const origin = request.headers.get("origin");
+            if (!origin) {
+                throw new Error("Origin header is not set in the request");
+            }
+
             const session = await stripe.checkout.sessions.create({
                 mode: "payment",
                 payment_method_types: ["card"],
                 line_items: lineItems,
-                success_url: `${request.headers.get("origin")}/success`,
-                cancel_url: `${request.headers.get("origin")}/?canceled=true`,
+                success_url: `${origin}/success`,
+                cancel_url: `${origin}/?canceled=true`,
             });
 
             return NextResponse.json({ session });

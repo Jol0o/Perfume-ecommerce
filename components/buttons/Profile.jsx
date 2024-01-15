@@ -14,17 +14,14 @@ const solutions = [
   {
     name: "Profile",
     icon: UserIcon,
-    href: "Profile",
   },
   {
     name: "Favorite",
     icon: HeartIcon,
-    href: "/favorite",
   },
   {
     name: "Settings",
     icon: Cog6ToothIcon,
-    href: "Settings",
   },
 ];
 

@@ -76,6 +76,7 @@ function Bag() {
     }
   };
 
+  console.log(cart);
   return (
     <>
       <div className="w-[clamp(100px,80%,500px)]">
@@ -101,9 +102,9 @@ function Bag() {
           <div className="flex flex-col gap-3 mt-5">
             {cart.map((item, index) => {
               return (
-                <div key={index} className="flex w-full gap-5 justify-evenly">
+                <div key={item.id} className="flex w-full gap-5 justify-evenly">
                   <Image
-                    src={item.image[0]}
+                    src={item.imageUrl}
                     alt="item"
                     height={200}
                     width={200}

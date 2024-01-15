@@ -31,8 +31,6 @@ function Order() {
     setTotal(calculatedTotal);
   };
 
-  console.log(fee);
-
   return (
     <div className="w-full  md:w-[clamp(200px,100%,500px)]">
       <h1 className="text-2xl font-bold text-[#232321]">Order Summary</h1>

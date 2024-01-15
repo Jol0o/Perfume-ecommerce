@@ -21,20 +21,6 @@ function Header() {
                 Shop now
               </button>
             </div>
-            <div className="flex flex-col gap-2">
-              <Image
-                src="/bg/Rectangle2.png"
-                alt="1"
-                width={100}
-                height={100}
-              />
-              <Image
-                src="/bg/Rectangle1.png"
-                alt="1"
-                width={100}
-                height={100}
-              />
-            </div>
           </div>
         </div>
       </div>
