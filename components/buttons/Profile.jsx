@@ -10,21 +10,6 @@ import Link from "next/link";
 import { auth } from "@/firebase/config";
 import { signOut } from "firebase/auth";
 
-const solutions = [
-  {
-    name: "Profile",
-    icon: UserIcon,
-  },
-  {
-    name: "Favorite",
-    icon: HeartIcon,
-  },
-  {
-    name: "Settings",
-    icon: Cog6ToothIcon,
-  },
-];
-
 export default function Profile() {
   const logout = async () => {
     try {
@@ -64,28 +49,6 @@ export default function Profile() {
         <Popover.Panel className="absolute z-10 flex w-screen px-4 mt-5 -translate-x-1/2 left- max-w-max">
           <div className="flex-auto w-screen max-w-[300px] overflow-hidden text-sm leading-6 bg-white shadow-lg rounded-3xl ring-1 ring-gray-900/5">
             <div className="p-4">
-              {solutions.map((item) => (
-                <div
-                  key={item.name}
-                  className="relative flex items-center p-4 rounded-lg group gap-x-6 hover:bg-gray-50"
-                >
-                  <div className="flex items-center justify-center flex-none mt-1 rounded-lg h-11 w-11 bg-gray-50 group-hover:bg-white">
-                    <item.icon
-                      className="w-6 h-6 text-gray-600 group-hover:text-indigo-600"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div>
-                    <Link
-                      href={item.href}
-                      className="font-semibold text-gray-900"
-                    >
-                      {item.name}
-                      <span className="absolute inset-0" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
               <div className="relative flex items-center p-4 rounded-lg group gap-x-6 hover:bg-gray-50">
                 <div className="flex items-center justify-center flex-none mt-1 rounded-lg h-11 w-11 bg-gray-50 group-hover:bg-white">
                   <ArrowLeftOnRectangleIcon

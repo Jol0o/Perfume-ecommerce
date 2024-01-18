@@ -2,9 +2,11 @@
 import { useUserStore } from "@/zustand/store";
 import React, { useState, useEffect } from "react";
 import CheckOut from "./../buttons/CheckOut";
+import { useRouter } from "next/navigation";
+import { auth, db } from "@/firebase/config";
+import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
-function Order() {
-  const { updateCart, cart } = useUserStore((state) => state);
+function Order({cart}) {
   const [fee, setFee] = useState(0);
   const [total, setTotal] = useState(0);
 

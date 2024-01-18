@@ -1,9 +1,8 @@
-import { useUserStore } from "@/zustand/store";
+
 import { loadStripe } from "@stripe/stripe-js";
 import React from "react";
 
-function CheckOut() {
-  const { cart } = useUserStore((state) => state);
+function CheckOut({cart}) {
 
   const handleClick = async () => {
     const stripe = await loadStripe(process.env.NEXT_PUBLIC_PUBLISH_KEY);

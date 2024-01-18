@@ -5,30 +5,61 @@ import Order from "./Order";
 import { auth, db } from "@/firebase/config";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { useUserStore } from "./../../zustand/store";
+import { useRouter } from "next/navigation";
 
 function Bag() {
-  const { updateCart, cart } = useUserStore((state) => state);
+  const [cart, setCart] = useState([]);
+  const router = useRouter();
+
+  let uid;
+  if (!auth.currentUser) {
+    uid = localStorage.getItem("uid");
+    console.log("uid: " + uid);
+    if (!uid) {
+      router.push("/login");
+      return;
+    }
+  } else {
+    uid = auth.currentUser.uid;
+  }
+
+  const fetchData = async () => {
+    try {
+      const userRef = doc(db, "users", uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        setCart(userData.cart);
+      } else {
+        console.error(`No document found for uid: ${uid}`);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    cart;
+    fetchData();
   }, []);
 
+  console.log(cart);
   const addQuantity = async (id) => {
     const userRef = doc(db, "users", auth.currentUser.uid);
 
     const cartItemSnapshot = await getDoc(userRef);
     const data = cartItemSnapshot.data();
-    const product = data.cart;
+    const product = [...data.cart]; // create a new copy of the cart
 
     const itemIndex = product.findIndex((item) => item.id === id);
 
     if (itemIndex !== -1) {
-      const item = product[itemIndex];
+      const item = { ...product[itemIndex] }; // create a new copy of the item
       if (item && item.quantity !== undefined) {
         item.quantity += 1;
+        product[itemIndex] = item; // replace the item in the cart
         await updateDoc(userRef, { cart: product });
-        updateCart(product);
       }
+      fetchData();
     }
   };
 
@@ -47,13 +78,12 @@ function Bag() {
         if (item.quantity > 1) {
           item.quantity -= 1;
           await updateDoc(userRef, { cart: product });
-          updateCart(product);
         } else if (item.quantity === 1) {
           product.splice(itemIndex, 1);
           await updateDoc(userRef, { cart: product });
-          updateCart(product);
         }
       }
+      fetchData();
     }
   };
 
@@ -69,14 +99,13 @@ function Bag() {
 
       await updateDoc(userRef, { cart: updatedCart });
       console.log("Item successfully deleted!");
-
-      updateCart(updatedCart); // Assuming you have a function to update the cart state
+      fetchData();
+      // Assuming you have a function to update the cart state
     } else {
       console.error("User document not found!");
     }
   };
 
-  console.log(cart);
   return (
     <>
       <div className="w-[clamp(100px,80%,500px)]">
@@ -102,7 +131,7 @@ function Bag() {
           <div className="flex flex-col gap-3 mt-5">
             {cart.map((item, index) => {
               return (
-                <div key={item.id} className="flex w-full gap-5 justify-evenly">
+                <div key={index} className="flex w-full gap-5 justify-evenly">
                   <Image
                     src={item.imageUrl}
                     alt="item"
@@ -114,14 +143,10 @@ function Bag() {
                     <h1 className="font-bold text-[clamp(20px,3vw,30px)]">
                       {item.name}
                     </h1>
-                    <p className="font-semibold text-gray-600 text-[clamp(15px,3vw,20px)] ">
-                      {item.category}
-                    </p>
-                    <p className="capitalize font-semibold text-gray-600 text-[clamp(15px,3vw,20px)] ">
-                      {item.color}
+                    <p className="font-semibold text-gray-600 capitalize text-[clamp(15px,3vw,18px)] ">
+                      {item.genderType}
                     </p>
                     <div className="flex text-center w-full justify-between font-semibold text-gray-600 text-[clamp(12px,3vw,18px)] ">
-                      <h1>Size {item.size}</h1>
                       <div className="flex flex-wrap gap-2">
                         <p>Quantity {item.quantity}</p>
                         <div className="flex gap-1">
@@ -140,6 +165,9 @@ function Bag() {
                         </div>
                       </div>
                     </div>
+                    <p className="text-[#4A69E2] font-bold text-md">
+                      Oilbase Amount : {item.oilbaseAmount}
+                    </p>
                     <div className="block md:hidden">
                       <p className="text-[#4A69E2] font-bold text-xl">
                         ₱{(item.price * item.quantity).toLocaleString()}
@@ -193,7 +221,7 @@ function Bag() {
             })}
           </div>
         </div>
-        <Order />
+        <Order cart={cart} />
       </div>
     </>
   );

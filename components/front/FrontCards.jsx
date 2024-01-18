@@ -1,5 +1,5 @@
 "use client";
-import { db } from "@/firebase/config";
+import { db, auth } from "@/firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +10,13 @@ function FrontCards() {
   const [product, setProduct] = useState([]);
   const productCollectionRef = collection(db, "perfume");
   const route = useRouter();
+
+  useEffect(() => {
+    if (auth.currentUser) {
+      const uid = auth.currentUser.uid;
+      localStorage.setItem("uid", uid);
+    }
+  }, []);
 
   const getProduct = async () => {
     try {

@@ -7,10 +7,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 function DetailCard({ details }) {
-  const colors = ["Green", "White", "Yellow"];
-  const size = [25, 26, 27, 28, 29, 30];
-  const [selectedColor, setSelectedColor] = useState("");
-  const [selectedSize, setSelectedSize] = useState(0);
   const router = useRouter();
 
   const { updateCart, updateUser } = useUserStore((state) => state);
@@ -45,8 +41,6 @@ function DetailCard({ details }) {
           updatedCart.push({
             ...product,
             quantity: 1,
-            color: selectedColor,
-            size: selectedSize,
           });
         } else {
           // Increase the quantity of the product in the cart by 1
@@ -54,6 +48,7 @@ function DetailCard({ details }) {
         }
         await setDoc(userRef, { cart: updatedCart });
         updateCart(updatedCart);
+        router.push("/cart");
       } catch (error) {
         console.error(error);
       }
@@ -77,22 +72,6 @@ function DetailCard({ details }) {
         </p>
       </div>
       <form className="flex flex-col gap-4">
-        <input
-          type="search"
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Enter amount"
-          className={`${
-            open ? "w-38 p-2 border" : "w-0"
-          } outline-none  ease-out duration-300 capitalize  rounded-md mr-2`}
-        />{" "}
-        <input
-          type="search"
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Enter oil based amount"
-          className={`${
-            open ? "w-38 p-2 border" : "w-0"
-          } outline-none  ease-out duration-300 capitalize  rounded-md mr-2`}
-        />
         {/* <div className="mb-5">
           <h1 className="text-[#232321] uppercase font-bold text-sm mb-2">
             Colors
