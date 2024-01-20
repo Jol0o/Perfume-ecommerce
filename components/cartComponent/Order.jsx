@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { auth, db } from "@/firebase/config";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
-function Order({cart}) {
+function Order({ cart }) {
   const [fee, setFee] = useState(0);
   const [total, setTotal] = useState(0);
 
@@ -53,7 +53,8 @@ function Order({cart}) {
           <p className="font-bold text-xl text-[#232321]">Total</p>
           <p>PHP {total.toLocaleString()}</p>
         </div>
-        <CheckOut cart={cart}/>
+        {/* <CheckOut cart={cart}/> */}
+        <button  className="font-semibold text-sm transition duration-200 ease-in bg-[#232321] hover:bg-[#6a6969] text-[#fafafa] py-3 uppercase rounded-md">Comming soon</button>
       </div>
     </div>
   );

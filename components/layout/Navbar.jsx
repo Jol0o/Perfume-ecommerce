@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Profile from "./../buttons/Profile";
+import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 
 function Navbar() {
   const [user] = useAuthState(auth);
@@ -84,7 +85,10 @@ function Navbar() {
           {user && (
             <Link href="/cart">
               <li className="px-3 py-1 bg-orange-400 rounded-full">
-                {cart.length}
+                <ShoppingBagIcon
+                  className="w-4 h-4 text-gray-600 hover:text-indigo-600"
+                  aria-hidden="true"
+                />
               </li>
             </Link>
           )}

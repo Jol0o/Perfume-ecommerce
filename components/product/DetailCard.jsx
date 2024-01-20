@@ -48,6 +48,41 @@ function DetailCard({ details }) {
         }
         await setDoc(userRef, { cart: updatedCart });
         updateCart(updatedCart);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const buy = async (event, product) => {
+    event.preventDefault();
+    if (!auth.currentUser) {
+      router.push("/login");
+    } else {
+      const uid = auth.currentUser.uid;
+      const userRef = doc(db, "users", uid);
+      try {
+        const userSnap = await getDoc(userRef);
+        let updatedCart = [];
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          updatedCart.push(...userData.cart);
+        }
+        const productIndex = updatedCart.findIndex(
+          (item) => item.id === product.id
+        );
+        if (productIndex === -1) {
+          // Add the product to the cart with a quantity of 1
+          updatedCart.push({
+            ...product,
+            quantity: 1,
+          });
+        } else {
+          // Increase the quantity of the product in the cart by 1
+          updatedCart[productIndex].quantity += 1;
+        }
+        await setDoc(userRef, { cart: updatedCart });
+        updateCart(updatedCart);
         router.push("/cart");
       } catch (error) {
         console.error(error);
@@ -66,11 +101,14 @@ function DetailCard({ details }) {
         <h1 className="font-bold text-[32px] text-[#232321] ">
           {details.name}
         </h1>
-        <p className="text-lg font-medium text-gray-600">{details.category}</p>
+        <p className="text-md font-medium text-gray-600">
+          Oilbase: {details.oilbaseAmount}ml
+        </p>
         <p className="text-[24px] font-bold text-indigo-600">
           {details.price.toLocaleString()} PHP
         </p>
       </div>
+
       <form className="flex flex-col gap-4">
         {/* <div className="mb-5">
           <h1 className="text-[#232321] uppercase font-bold text-sm mb-2">
@@ -151,12 +189,12 @@ function DetailCard({ details }) {
               </svg>
             </button>
           </div>
-          <Link
-            href="/cart"
+          <button
+            onClick={(event) => buy(event, details)}
             className="font-semibold text-sm transition duration-200 ease-in bg-[#4A69E2] text-center hover:bg-[#6a6969] text-[#fafafa] py-3 uppercase rounded-md"
           >
-            Buy it Now
-          </Link>
+            Buy
+          </button>
         </div>
       </form>
       <div>
