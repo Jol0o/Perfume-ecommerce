@@ -11,7 +11,6 @@ import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 
 function Navbar() {
   const [user] = useAuthState(auth);
-  const { cart } = useUserStore((state) => state);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const router = useRouter();
@@ -52,7 +51,11 @@ function Navbar() {
             />
             <button
               onClick={submit}
-              onMouseEnter={() => setOpen(!open)}
+              onMouseEnter={() => {
+                if (!search) {
+                  setOpen(!open);
+                }
+              }}
               className="self-center"
             >
               <svg

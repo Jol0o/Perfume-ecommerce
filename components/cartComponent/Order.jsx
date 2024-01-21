@@ -41,7 +41,7 @@ function Order({ cart }) {
           <p className="font-bold text-[#232321]">{cart.length} ITEM</p>
           <div className="min-h-[50px]">
             {cart.map((item) => {
-              return <p>PHP {(item.price * item.quantity).toLocaleString()}</p>;
+              return <p key={item}>PHP {(item.price * item.quantity).toLocaleString()}</p>;
             })}
           </div>
         </div>

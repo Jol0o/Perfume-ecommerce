@@ -7,11 +7,15 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  doc,
+  setDoc,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { auth } from "@/firebase/config";
-import { useUserStore } from "@/zustand/store";
+import { auth, db } from "@/firebase/config";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const [isError, setIsError] = useState(false);
@@ -19,11 +23,16 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false);
-  const { updateUser } = useUserStore((state) => state);
   const router = useRouter();
 
   const login = async (e) => {
     e.preventDefault();
+    if (!email && !password) {
+      toast.error("Please input your credentials!", {
+        position: "top-right",
+      });
+      return;
+    }
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/");
@@ -35,12 +44,19 @@ function Login() {
 
   const register = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      toast.error("Please input your credentials!", {
+        position: "top-right",
+      });
+      return;
+    }
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       router.push("/");
     } catch (err) {
       setIsError(true);
       setError(err.toString());
+      console.log(err.toString());
     }
   };
 
@@ -108,7 +124,7 @@ function Login() {
               </label>
             </div>
             <button
-              onClick={register}
+              onClick={isRegister ? login : register}
               className="flex bg-[#232321] justify-between py-2 uppercase px-3 rounded-md text-[#fafafa] font-bold text-sm items-center"
             >
               Email Login
@@ -162,6 +178,19 @@ function Login() {
         </div>
         <Club />
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
     </div>
   );
 }

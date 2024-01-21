@@ -1,6 +1,6 @@
 "use client";
 import { db, auth } from "@/firebase/config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc , getDoc } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,27 @@ function FrontCards() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!auth.currentUser) return;
+    const setUserDoc = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(userRef);
+        if (!docSnap.exists()) {
+          await setDoc(userRef, {
+            email: user?.email,
+            name: user?.displayName,
+            uid: user?.uid,
+            img: user?.photoURL,
+            // Add any other user data you want to store
+          });
+        }
+      }
+    };
+    setUserDoc();
+  }, []);
+  
   const getProduct = async () => {
     try {
       const data = await getDocs(productCollectionRef);
@@ -53,7 +74,7 @@ function FrontCards() {
             .filter((item) => item.genderType === "women")
             .map((item) => {
               return (
-                <Link href={`/product/${item.id}`} key={item.name}>
+                <Link href={`/product/${item.id}`} key={item.id}>
                   <div className="max-h-[300px] h-full mt-3 md:mt-0 md:min-h-[500px] sm:w-[clamp(50px,100%,300px)] md:w-[310px] w-[clamp(30px,100%,200px)] flex flex-col items-center justify-center">
                     <div className="relative w-full rounded-lg h-1/2 ">
                       <Image

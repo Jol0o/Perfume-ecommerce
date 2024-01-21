@@ -2,22 +2,20 @@
 import { db, auth } from "@/firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import { useUserStore } from "./../../zustand/store";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function DetailCard({ details }) {
   const router = useRouter();
 
-  const { updateCart, updateUser } = useUserStore((state) => state);
+  // const handleColorChange = (color) => {
+  //   setSelectedColor(color);
+  // };
 
-  const handleColorChange = (color) => {
-    setSelectedColor(color);
-  };
-
-  const handleSizeChange = (size) => {
-    setSelectedSize(size);
-  };
+  // const handleSizeChange = (size) => {
+  //   setSelectedSize(size);
+  // };
 
   const addToCart = async (event, product) => {
     event.preventDefault();
@@ -25,7 +23,7 @@ function DetailCard({ details }) {
       router.push("/login");
     } else {
       const uid = auth.currentUser.uid;
-      const userRef = doc(db, "users", uid);
+      const userRef = doc(db, "cart", uid);
       try {
         const userSnap = await getDoc(userRef);
         let updatedCart = [];
@@ -36,20 +34,30 @@ function DetailCard({ details }) {
         const productIndex = updatedCart.findIndex(
           (item) => item.id === product.id
         );
+
         if (productIndex === -1) {
           // Add the product to the cart with a quantity of 1
           updatedCart.push({
             ...product,
             quantity: 1,
+            uid,
+          });
+          toast.success("Product added to cart successfully!", {
+            position: "top-right",
           });
         } else {
           // Increase the quantity of the product in the cart by 1
           updatedCart[productIndex].quantity += 1;
+          toast.success("Added product quantity to cart successfully!", {
+            position: "top-right",
+          });
         }
         await setDoc(userRef, { cart: updatedCart });
-        updateCart(updatedCart);
       } catch (error) {
         console.error(error);
+        toast.error("Error adding the product in your cart!", {
+          position: "top-right",
+        });
       }
     }
   };
@@ -60,7 +68,7 @@ function DetailCard({ details }) {
       router.push("/login");
     } else {
       const uid = auth.currentUser.uid;
-      const userRef = doc(db, "users", uid);
+      const userRef = doc(db, "cart", uid);
       try {
         const userSnap = await getDoc(userRef);
         let updatedCart = [];
@@ -76,13 +84,13 @@ function DetailCard({ details }) {
           updatedCart.push({
             ...product,
             quantity: 1,
+            uid,
           });
         } else {
           // Increase the quantity of the product in the cart by 1
           updatedCart[productIndex].quantity += 1;
         }
         await setDoc(userRef, { cart: updatedCart });
-        updateCart(updatedCart);
         router.push("/cart");
       } catch (error) {
         console.error(error);
@@ -92,6 +100,19 @@ function DetailCard({ details }) {
 
   return (
     <div className="flex flex-col gap-5 w-full lg:w-[400px]">
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <div>
         <h1 className="bg-indigo-600 w-32 text-[#fafafa] text-center py-2 rounded-md font-semibold text-sm">
           New Release
@@ -101,11 +122,17 @@ function DetailCard({ details }) {
         <h1 className="font-bold text-[32px] text-[#232321] ">
           {details.name}
         </h1>
-        <p className="text-md font-medium text-gray-600">
+        <p className="font-medium text-gray-600 text-md">
           Oilbase: {details.oilbaseAmount}ml
         </p>
         <p className="text-[24px] font-bold text-indigo-600">
           {details.price.toLocaleString()} PHP
+        </p>
+      </div>
+      <div className="flex flex-col gap-3">
+        <h1 className="text-lg font-bold">About The Product</h1>
+        <p className="text-sm font-medium text-gray-500">
+          {details.description}
         </p>
       </div>
 
@@ -165,30 +192,13 @@ function DetailCard({ details }) {
           </div>
         </div> */}
         <div className="flex flex-col gap-2">
-          <div className="flex w-full gap-2">
-            <button
-              onClick={(event) => addToCart(event, details)}
-              className="bg-[#232321] py-3 font-semibold text-sm rounded-md uppercase text-[#fafafa] w-[85%]"
-            >
-              Add To Cart
-            </button>
-            <button className="bg-[#232321] text-[#fafafa] rounded-md w-[15%] flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                />
-              </svg>
-            </button>
-          </div>
+          <button
+            onClick={(event) => addToCart(event, details)}
+            className="bg-[#232321] py-3 font-semibold text-sm rounded-md uppercase text-[#fafafa] w-full"
+          >
+            Add To Cart
+          </button>
+
           <button
             onClick={(event) => buy(event, details)}
             className="font-semibold text-sm transition duration-200 ease-in bg-[#4A69E2] text-center hover:bg-[#6a6969] text-[#fafafa] py-3 uppercase rounded-md"
@@ -200,12 +210,6 @@ function DetailCard({ details }) {
       <div>
         <p className="text-sm font-semibold text-gray-500">
           This product is excluded from site promotions and discounts.
-        </p>
-      </div>
-      <div className="flex flex-col gap-3">
-        <h1 className="text-lg font-bold">About The Product</h1>
-        <p className="text-sm font-medium text-gray-500">
-          {details.description}
         </p>
       </div>
     </div>

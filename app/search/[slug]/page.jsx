@@ -9,31 +9,46 @@ function page({ params }) {
   const decodedSlug = decodeURIComponent(slug);
   const [result, setResult] = useState([]);
   const [error, setError] = useState("");
+  const [products, setProducts] = useState([]);
 
-  const getSearchResults = async () => {
-    try {
-      const searchRef = collection(db, "products");
-      const q = query(searchRef, where("name", ">=", decodedSlug)); // Use query() function to create a query
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.size > 0) {
-        const data = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setResult(data);
-      } else {
-        setError("No results found");
+  const getSearch = () => {
+    if (products) {
+      const filteredData = products.filter((item) => {
+        return (
+          item.name.toLowerCase().includes(decodedSlug.toLowerCase()) ||
+          item.genderType.toLowerCase().includes(decodedSlug.toLowerCase()) ||
+          item.description.toLowerCase().includes(decodedSlug.toLowerCase())
+        );
+      });
+      setResult(filteredData);
+      if (filteredData.length === 0) {
+        setError("No result found");
       }
-    } catch (error) {
-      console.error("Error searching for products:", error);
-      setError("An error occurred while searching for products.");
+    }
+  };
+
+
+  useEffect(() => {
+    getSearch();
+  }, [products, decodedSlug]);
+
+  const getProducts = async () => {
+    try {
+      const productCollectionRef = collection(db, "perfume");
+      const data = await getDocs(productCollectionRef);
+      const filteredData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setProducts(filteredData);
+    } catch (err) {
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    getSearchResults();
-  }, [slug]);
+    getProducts();
+  }, []);
 
   return (
     <>

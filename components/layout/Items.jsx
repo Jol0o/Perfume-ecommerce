@@ -34,7 +34,7 @@ function Items() {
       // router.push("login");
     } else {
       const uid = auth.currentUser.uid;
-      const userRef = doc(db, "users", uid);
+      const userRef = doc(db, "cart", uid);
       try {
         const userSnap = await getDoc(userRef);
         const cart = [];

@@ -6,26 +6,30 @@ import { auth, db } from "@/firebase/config";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { useUserStore } from "./../../zustand/store";
 import { useRouter } from "next/navigation";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Bag() {
   const [cart, setCart] = useState([]);
   const router = useRouter();
+  const [uid, setUid] = useState("");
 
-  let uid;
-  if (!auth.currentUser) {
-    uid = localStorage.getItem("uid");
-    console.log("uid: " + uid);
-    if (!uid) {
-      router.push("/login");
-      return;
+  useEffect(() => {
+    if (!auth.currentUser) {
+      const id = localStorage.getItem("uid");
+      setUid(localStorage.getItem("uid"));
+      if (!id) {
+        router.push("/login");
+        return;
+      }
+    } else {
+      setUid(auth.currentUser.uid);
     }
-  } else {
-    uid = auth.currentUser.uid;
-  }
+  });
 
   const fetchData = async () => {
     try {
-      const userRef = doc(db, "users", uid);
+      const userRef = doc(db, "cart", uid);
       const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
         const userData = userSnap.data();
@@ -34,17 +38,21 @@ function Bag() {
         console.error(`No document found for uid: ${uid}`);
       }
     } catch (error) {
+      toast.error("Error getting your data!", {
+        position: "top-right",
+      });
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (!uid) return;
 
-  console.log(cart);
+    fetchData();
+  }, [uid]);
+
   const addQuantity = async (id) => {
-    const userRef = doc(db, "users", auth.currentUser.uid);
+    const userRef = doc(db, "cart", auth.currentUser.uid);
 
     const cartItemSnapshot = await getDoc(userRef);
     const data = cartItemSnapshot.data();
@@ -58,13 +66,16 @@ function Bag() {
         item.quantity += 1;
         product[itemIndex] = item; // replace the item in the cart
         await updateDoc(userRef, { cart: product });
+        toast.success("Successeful adding quantity!", {
+          position: "top-right",
+        });
       }
       fetchData();
     }
   };
 
   const minusQuantity = async (id) => {
-    const userRef = doc(db, "users", auth.currentUser.uid);
+    const userRef = doc(db, "cart", auth.currentUser.uid);
 
     const cartItemSnapshot = await getDoc(userRef);
     const data = cartItemSnapshot.data();
@@ -78,9 +89,15 @@ function Bag() {
         if (item.quantity > 1) {
           item.quantity -= 1;
           await updateDoc(userRef, { cart: product });
+          toast.success("Successful in reducing quantity!", {
+            position: "top-right",
+          });
         } else if (item.quantity === 1) {
           product.splice(itemIndex, 1);
           await updateDoc(userRef, { cart: product });
+          toast.success("Successful in deleting the item!", {
+            position: "top-right",
+          });
         }
       }
       fetchData();
@@ -88,7 +105,7 @@ function Bag() {
   };
 
   const deleteItem = async (id) => {
-    const userRef = doc(db, "users", auth.currentUser.uid);
+    const userRef = doc(db, "cart", auth.currentUser.uid);
     const userSnapshot = await getDoc(userRef);
 
     if (userSnapshot.exists()) {
@@ -98,16 +115,34 @@ function Bag() {
       const updatedCart = cart.filter((item) => item.id !== id);
 
       await updateDoc(userRef, { cart: updatedCart });
-      console.log("Item successfully deleted!");
+      toast.success("Item successfully deleted!", {
+        position: "top-right",
+      });
       fetchData();
       // Assuming you have a function to update the cart state
     } else {
+      toast.error("User document not found!", {
+        position: "top-right",
+      });
       console.error("User document not found!");
     }
   };
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <div className="w-[clamp(100px,80%,500px)]">
         <h1 className="text-[clamp(20px,5vw,30px)] font-bold">
           Saving to celebrate
@@ -131,7 +166,10 @@ function Bag() {
           <div className="flex flex-col gap-3 mt-5">
             {cart.map((item, index) => {
               return (
-                <div key={index} className="flex w-full gap-5 justify-evenly">
+                <div
+                  key={item.id || index}
+                  className="flex w-full gap-5 justify-evenly"
+                >
                   <Image
                     src={item.imageUrl}
                     alt="item"
