@@ -46,10 +46,6 @@ function Order({ cart }) {
           </div>
         </div>
         <div className="flex items-center justify-between text-lg font-semibold text-gray-600 text-semibold">
-          <p className="font-bold text-[#232321]">Delivery Fee</p>
-          <p>PHP {fee}</p>
-        </div>
-        <div className="flex items-center justify-between text-lg font-semibold text-gray-600 text-semibold">
           <p className="font-bold text-xl text-[#232321]">Total</p>
           <p>PHP {total.toLocaleString()}</p>
         </div>
