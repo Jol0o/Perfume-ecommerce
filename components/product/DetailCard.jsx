@@ -123,7 +123,7 @@ function DetailCard({ details }) {
           {details.name}
         </h1>
         <p className="font-medium text-gray-600 text-md">
-          Oilbase: {details.oilbaseAmount}ml
+          50ml
         </p>
         <p className="text-[24px] font-bold text-indigo-600">
           {details.price.toLocaleString()} PHP

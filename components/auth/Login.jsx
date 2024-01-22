@@ -7,9 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  doc,
-  setDoc,
+
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -146,7 +144,7 @@ function Login() {
           </form>
 
           <p className="text-xs font-medium text-center">
-            {isRegister ? "Don't have a account?" : "Already have a account?"}
+            {isRegister ? "Don't have a account? " : "Already have a account? "}
             <button
               onClick={() => setIsRegister(!isRegister)}
               className="text-blue-500"
@@ -171,8 +169,8 @@ function Login() {
           </div>
           <div className="mt-2">
             <p className="text-sm font-semibold text-gray-600 text-medium">
-              By clicking 'Log In' you agree to our website KicksClub Terms &
-              Conditions, Kicks Privacy Notice and Terms & Conditions.
+              By clicking 'Log In' you agree to our website Aromatic Terms &
+              Conditions, AromaPlus Privacy Notice and Terms & Conditions.
             </p>
           </div>
         </div>
