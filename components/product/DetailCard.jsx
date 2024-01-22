@@ -8,6 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 function DetailCard({ details }) {
   const router = useRouter();
+  const [oilbase, setOilbase] = useState(0);
+  const [amount, setAmount] = useState(0);
 
   // const handleColorChange = (color) => {
   //   setSelectedColor(color);
@@ -40,6 +42,8 @@ function DetailCard({ details }) {
           updatedCart.push({
             ...product,
             quantity: 1,
+            oilbaseAmount: oilbase,
+            amount,
             uid,
           });
           toast.success("Product added to cart successfully!", {
@@ -84,6 +88,8 @@ function DetailCard({ details }) {
           updatedCart.push({
             ...product,
             quantity: 1,
+            oilbaseAmount: oilbase,
+            amount,
             uid,
           });
         } else {
@@ -137,6 +143,23 @@ function DetailCard({ details }) {
       </div>
 
       <form className="flex flex-col gap-4">
+        <input
+          type="number"
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="Enter amount"
+          className={`${
+            open ? "w-38 p-2 border" : "w-0"
+          } outline-none  ease-out duration-300 capitalize  rounded-md mr-2`}
+        />{" "}
+        <input
+          type="number"
+          max={details.oilbaseAmount}
+          onChange={(e) => setOilbase(e.target.value)}
+          placeholder="Enter oil based amount"
+          className={`${
+            open ? "w-38 p-2 border" : "w-0"
+          } outline-none  ease-out duration-300 capitalize  rounded-md mr-2`}
+        />
         {/* <div className="mb-5">
           <h1 className="text-[#232321] uppercase font-bold text-sm mb-2">
             Colors

@@ -7,9 +7,6 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  doc,
-  setDoc,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
